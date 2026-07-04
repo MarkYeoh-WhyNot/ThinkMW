@@ -1,0 +1,27 @@
+# Environment
+.env
+.env.local
+*.env
+env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Node
+node_modules/
+.next/
+frontend/.env.local
+
+# Misc
+.DS_Store
+*.log
+*.tsbuildinfo
+.pytest_cache/
+.claude/settings.local.json

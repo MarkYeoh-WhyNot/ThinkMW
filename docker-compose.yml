@@ -1,0 +1,44 @@
+services:
+  neo4j:
+    image: neo4j:5
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/thinkmw_dev
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - neo4j_data:/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file: ./backend/env.local
+    depends_on:
+      - neo4j
+      - redis
+    volumes:
+      - ./backend:/app
+      - uploads:/app/uploads
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build: ./backend
+    env_file: ./backend/env.local
+    depends_on:
+      - redis
+      - neo4j
+    volumes:
+      - ./backend:/app
+      - uploads:/app/uploads
+    command: celery -A app.workers.celery_app worker --loglevel=info
+
+volumes:
+  neo4j_data:
+  uploads:
