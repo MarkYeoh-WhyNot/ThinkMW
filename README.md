@@ -2,6 +2,21 @@
 
 GraphRAG-powered knowledge assessment platform for secondary school students.
 
+## Screenshots
+
+A teacher uploads a lecture PDF (here, an engineering lecture on PID
+controllers); the pipeline extracts concept nodes via an LLM and writes them
+to Neo4j. The student then builds their own understanding by connecting
+those concepts and labeling each relationship in their own words:
+
+![Knowledge Canvas — a student's concept graph with labeled relationships](docs/screenshots/knowledge-canvas.png)
+
+Submitting the graph scores it against the reference structure and surfaces
+where the student's model diverges — including crediting connections the
+student made that go beyond the standard model:
+
+![Scoring results — coverage, structure, and novel-connection breakdown](docs/screenshots/scoring-results.png)
+
 ## Stack
 
 | Layer | Technology |

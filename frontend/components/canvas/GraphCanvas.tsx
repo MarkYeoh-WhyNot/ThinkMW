@@ -6,6 +6,7 @@ import ReactFlow, {
   Controls,
   MiniMap,
   useReactFlow,
+  ConnectionMode,
   type NodeTypes,
 } from "reactflow"
 import "reactflow/dist/style.css"
@@ -73,7 +74,7 @@ interface GraphCanvasProps {
 }
 
 export default function GraphCanvas({ allNodes = [] }: GraphCanvasProps) {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, pendingEdge, guided } =
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, startEditEdge, pendingEdge, guided } =
     useCanvasStore()
 
   // fitView is only available inside ReactFlow — proxy it via a ref
@@ -97,6 +98,8 @@ export default function GraphCanvas({ allNodes = [] }: GraphCanvasProps) {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onEdgeDoubleClick={(_, edge) => startEditEdge(edge)}
+          connectionMode={ConnectionMode.Loose}
           fitView
           deleteKeyCode="Backspace"
         >

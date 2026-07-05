@@ -6,9 +6,13 @@ import { create } from "zustand"
 import { type Node, type Edge, addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow"
 
 interface PendingEdge {
+  edgeId: string | null
   sourceNodeId: string
   targetNodeId: string
+  sourceHandle: string | null
+  targetHandle: string | null
   label: string
+  justification: string
 }
 
 export interface BehaviourSignals {
@@ -60,6 +64,7 @@ interface CanvasState {
   onEdgesChange: (changes: any) => void
   onConnect: (connection: any) => void
   setPendingEdge: (edge: PendingEdge | null) => void
+  startEditEdge: (edge: Edge) => void
   confirmEdgeLabel: (label: string, justification?: string) => void
   incrementHint: () => void
   setSubmitting: (v: boolean) => void
@@ -123,21 +128,58 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
 
   onConnect: (connection) => {
     set((s) => ({
-      pendingEdge: { sourceNodeId: connection.source, targetNodeId: connection.target, label: "" },
+      pendingEdge: {
+        edgeId: null,
+        sourceNodeId: connection.source,
+        targetNodeId: connection.target,
+        sourceHandle: connection.sourceHandle ?? null,
+        targetHandle: connection.targetHandle ?? null,
+        label: "",
+        justification: "",
+      },
       behaviour: { ...s.behaviour, lastActionAt: Date.now() },
     }))
   },
 
   setPendingEdge: (edge) => set({ pendingEdge: edge }),
 
+  startEditEdge: (edge) => {
+    set({
+      pendingEdge: {
+        edgeId: edge.id,
+        sourceNodeId: edge.source,
+        targetNodeId: edge.target,
+        sourceHandle: edge.sourceHandle ?? null,
+        targetHandle: edge.targetHandle ?? null,
+        label: (edge.data?.label as string | undefined) ?? (edge.label as string | undefined) ?? "",
+        justification: (edge.data?.justification as string | undefined) ?? "",
+      },
+    })
+  },
+
   confirmEdgeLabel: (label, justification) => {
     const { pendingEdge } = get()
     if (!pendingEdge) return
+
+    if (pendingEdge.edgeId) {
+      set((s) => ({
+        edges: s.edges.map((e) =>
+          e.id === pendingEdge.edgeId
+            ? { ...e, label, data: { ...e.data, label, justification: justification ?? null } }
+            : e
+        ),
+        pendingEdge: null,
+        behaviour: { ...s.behaviour, lastActionAt: Date.now() },
+      }))
+      return
+    }
 
     const newEdge: Edge = {
       id: `${pendingEdge.sourceNodeId}-${pendingEdge.targetNodeId}-${Date.now()}`,
       source: pendingEdge.sourceNodeId,
       target: pendingEdge.targetNodeId,
+      sourceHandle: pendingEdge.sourceHandle,
+      targetHandle: pendingEdge.targetHandle,
       label,
       type: "default",
       data: { label, justification: justification ?? null, canonicalType: null, route: null },

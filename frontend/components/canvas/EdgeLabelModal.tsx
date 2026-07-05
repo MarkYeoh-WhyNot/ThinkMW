@@ -23,8 +23,9 @@ function getJustificationPrompt(label: string): string {
 
 export default function EdgeLabelModal() {
   const { confirmEdgeLabel, setPendingEdge, pendingEdge } = useCanvasStore()
-  const [label, setLabel] = useState("")
-  const [justification, setJustification] = useState("")
+  const isEditing = !!pendingEdge?.edgeId
+  const [label, setLabel] = useState(pendingEdge?.label ?? "")
+  const [justification, setJustification] = useState(pendingEdge?.justification ?? "")
   const inputRef = useRef<HTMLInputElement>(null)
 
   // pendingEdge carries isNovel flag once semantic routing is wired;
@@ -57,7 +58,7 @@ export default function EdgeLabelModal() {
     <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-50">
       <div className="bg-white rounded-xl shadow-2xl p-5 w-84 border border-gray-200" style={{ width: "22rem" }}>
         <p className="text-sm font-bold text-gray-700 mb-1">
-          How does the first idea connect to the second?
+          {isEditing ? "Edit this connection" : "How does the first idea connect to the second?"}
         </p>
         <p className="text-xs text-gray-400 mb-3">
           Use your own words — describe the relationship as you understand it.
