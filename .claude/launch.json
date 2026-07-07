@@ -7,6 +7,34 @@
       "runtimeArgs": ["run", "dev"],
       "cwd": "frontend",
       "port": 3000
+    },
+    {
+      "name": "nota-backend",
+      "runtimeExecutable": ".nota-backend/venv/bin/uvicorn",
+      "runtimeArgs": ["main:app", "--host", "0.0.0.0", "--port", "8001"],
+      "cwd": ".nota-backend",
+      "port": 8001
+    },
+    {
+      "name": "nota-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "-p", "3001"],
+      "cwd": ".nota-frontend",
+      "port": 3001
+    },
+    {
+      "name": "pakar-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "-p", "3002"],
+      "cwd": ".pakar-frontend",
+      "port": 3002
+    },
+    {
+      "name": "athenax",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "-p", "3003"],
+      "cwd": "athenax",
+      "port": 3003
     }
   ]
 }

@@ -25,3 +25,8 @@ frontend/.env.local
 *.tsbuildinfo
 .pytest_cache/
 .claude/settings.local.json
+.nota-*
+.pakar-*
+.yks-quant*
+yksquant-run/
+athenax/
