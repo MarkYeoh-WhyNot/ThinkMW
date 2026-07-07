@@ -28,13 +28,6 @@
       "runtimeArgs": ["run", "dev", "--", "-p", "3002"],
       "cwd": ".pakar-frontend",
       "port": 3002
-    },
-    {
-      "name": "athenax",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "-p", "3003"],
-      "cwd": "athenax",
-      "port": 3003
     }
   ]
 }

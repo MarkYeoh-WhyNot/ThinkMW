@@ -29,4 +29,3 @@ frontend/.env.local
 .pakar-*
 .yks-quant*
 yksquant-run/
-athenax/
